@@ -1,0 +1,11 @@
+{
+  "action": "updateProduct",
+  "arguments": {
+    "ProductId": "4e7c408f-3c43-4570-aa03-598e7df9495c",
+    "Name": "Product 2",
+    "Description": "A product 2",
+    "Price": 100,
+    "Category": "something",
+    "Stock": 4
+  }
+}

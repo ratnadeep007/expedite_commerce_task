@@ -1,0 +1,237 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  expeditecommerce-task
+
+  Task from expedite commerce
+Resources:
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: Products
+      AttributeDefinitions:
+        - AttributeName: ProductId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: ProductId
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  ProductTaxonomyAttributesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ProductTaxonomyAttributes
+      AttributeDefinitions:
+        - AttributeName: TaxonomyId
+          AttributeType: S
+        - AttributeName: ParentId
+          AttributeType: S
+        - AttributeName: Name
+          AttributeType: S
+      KeySchema:
+        - AttributeName: TaxonomyId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: ParentIndex
+          KeySchema:
+            - AttributeName: ParentId
+              KeyType: HASH
+            - AttributeName: Name
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 5
+            WriteCapacityUnits: 5
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
+  ProductHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: product/
+      Handler: app.lambdaHandler
+      Runtime: nodejs20.x
+      Architectures:
+        - x86_64
+      Policies:
+        - AmazonDynamoDBFullAccess
+
+  ProductGraphqlApi:
+    Type: AWS::Serverless::GraphQLApi
+    Properties:
+      SchemaUri: ./gql/schema.graphql
+      Auth:
+        Type: API_KEY
+      ApiKeys:
+        ProductApiKey:
+          Description: Product API Key
+      DataSources:
+        Lambda:
+          ProductHandler:
+            FunctionArn: !GetAtt ProductHandler.Arn
+      Functions:
+        product:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: ProductHandler
+          CodeUri: ./gql/product.js
+        productTaxonomy:
+          Runtime:
+            Name: APPSYNC_JS
+            Version: 1.0.0
+          DataSource: ProductHandler
+          CodeUri: ./gql/productTaxonomy.js
+      Resolvers:
+        Mutation:
+          addProduct:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - product
+          updateProduct:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - product
+          deleteProduct:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - product
+          addProductTaxonomy:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - productTaxonomy
+          updateProductTaxonomy:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - productTaxonomy
+          deleteProductTaxonomy:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - productTaxonomy
+        Query:
+          getProduct:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - product
+          getProductTaxonomy:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - productTaxonomy
+
+#   HelloWorldGraphQLApi:
+#     Type: AWS::Serverless::GraphQLApi
+#     Properties:
+#       SchemaUri: ./gql/schema.graphql
+#       Auth:
+#         Type: API_KEY
+#       ApiKeys:
+#         MyApiKey:
+#           Description: my api key
+#       DataSources:
+#         DynamoDb:
+#           Posts:
+#             TableName: !Ref PostsTable
+#             TableArn: !GetAtt PostsTable.Arn
+#         Lambda:
+#           Greeter:
+#             FunctionArn: !GetAtt Greeter.Arn
+#       Functions:
+#         preprocessPostItem:
+#           Runtime:
+#             Name: APPSYNC_JS
+#             Version: 1.0.0
+#           DataSource: NONE
+#           CodeUri: ./gql/preprocessPostItem.js
+#         createPostItem:
+#           Runtime:
+#             Name: APPSYNC_JS
+#             Version: 1.0.0
+#           DataSource: Posts
+#           CodeUri: ./gql/createPostItem.js
+#         getPostFromTable:
+#           Runtime:
+#             Name: APPSYNC_JS
+#             Version: 1.0.0
+#           DataSource: Posts
+#           CodeUri: ./gql/getPostFromTable.js
+#         greet:
+#           Runtime:
+#             Name: APPSYNC_JS
+#             Version: 1.0.0
+#           DataSource: Greeter
+#           CodeUri: ./gql/greet.js
+#       Resolvers:
+#         Mutation:
+#           addPost:
+#             Runtime:
+#               Name: APPSYNC_JS
+#               Version: 1.0.0
+#             Pipeline:
+#               - preprocessPostItem
+#               - createPostItem
+#         Query:
+#           getPost:
+#             Runtime:
+#               Name: APPSYNC_JS
+#               Version: 1.0.0
+#             Pipeline:
+#               - getPostFromTable
+#           sayHello:
+#             Runtime:
+#               Name: APPSYNC_JS
+#               Version: 1.0.0
+#             Pipeline:
+#               - greet
+#           sayGoodbye:
+#             Runtime:
+#               Name: APPSYNC_JS
+#               Version: 1.0.0
+#             Pipeline:
+#               - greet
+
+Outputs:
+  ProductsTableName:
+    Description: Products Table Name
+    Value: !Ref ProductsTable
+    Export:
+      Name: ProductsTableName
+
+  ProductTaxonomyAttributesTableName:
+    Description: Product Taxonomy Attributes Table Name
+    Value: !Ref ProductTaxonomyAttributesTable
+    Export:
+      Name: ProductTaxonomyAttributesTableName
+
+  ProductGraphqlApiProductApiKey:
+    Description: API Key for ProductGraphqlApi
+    Value: !GetAtt ProductGraphqlApiProductApiKey.ApiKey
+
+  ProductGraphqlApi:
+    Description: ProductGraphqlApi endpoint URL for Prod environment
+    Value: !GetAtt ProductGraphqlApi.GraphQLUrl
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    LoggingConfig:
+      LogFormat: JSON

@@ -1,0 +1,85 @@
+schema {
+    query: Query
+    mutation: Mutation
+}
+
+type Query {
+    # getPost(id: String!): Post
+    # sayHello(name: String): String
+    # sayGoodbye(name: String): String
+    getProduct(ProductId: String): Product!
+    getProductTaxonomy(TaxonomyId: String): ProductTaxonomy!
+}
+
+input ProductInput {
+    Name: String!
+    Description: String!
+    Price: Int!
+    Category: String!
+    Stock: String!
+}
+
+input ProductTaxonomyInput {
+    Name: String!
+    Description: String!
+    ParentId: String
+    Type: String!
+}
+
+type IdResponse {
+    Id: String!
+}
+
+type Mutation {
+    addProduct(
+        Name: String!
+        Description: String!
+        Price: Int!
+        Category: String!
+        Stock: String!
+    ): IdResponse!
+    updateProduct(
+        ProductId: String!
+        Name: String!
+        Description: String!
+        Price: Int!
+        Category: String!
+        Stock: String!
+    ): Product!
+    deleteProduct(ProductId: String): IdResponse!
+    addProductTaxonomy(
+        Name: String!
+        Description: String!
+        ParentId: String
+        Type: String!
+    ): IdResponse!
+    updateProductTaxonomy(
+        TaxonomyId: String!
+        Name: String!
+        Description: String!
+        ParentId: String
+        Type: String!
+    ): ProductTaxonomy!
+    deleteProductTaxonomy(TaxonomyId: String): IdResponse!
+}
+
+type Product {
+    ProductId: String!
+    Name: String!
+    Description: String!
+    Category: String!
+    Price: Int!
+    Stock: Int!
+    CreatedAt: AWSDateTime
+    UpdatedAt: AWSDateTime
+}
+
+type ProductTaxonomy {
+    TaxonomyId: String!
+    Name: String!
+    Description: String!
+    ParentId: String!
+    Type: String!
+    CreatedAt: AWSDateTime
+    UpdatedAt: AWSDateTime
+}

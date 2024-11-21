@@ -1,0 +1,10 @@
+{
+  "action": "addProduct",
+  "arguments": {
+    "Name": "Product 1",
+    "Description": "A product",
+    "Price": 100,
+    "Category": "something",
+    "Stock": 3
+  }
+}

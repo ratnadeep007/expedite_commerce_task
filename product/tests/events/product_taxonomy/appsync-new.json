@@ -1,0 +1,8 @@
+{
+  "action": "addProductTaxonomy",
+  "arguments": {
+    "Name": "Tax 1",
+    "Description": "A Category",
+    "Type": "Category"
+  }
+}

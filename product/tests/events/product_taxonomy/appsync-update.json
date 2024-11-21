@@ -1,0 +1,9 @@
+{
+  "action": "updateProductTaxonomy",
+  "arguments": {
+    "TaxonomyId": "9a2f78bd-3949-471c-ae11-be017426004a",
+    "Name": "Tax 2",
+    "Description": "A Category Tax",
+    "Type": "Category"
+  }
+}
