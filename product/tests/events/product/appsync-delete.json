@@ -1,5 +1,5 @@
 {
-  "action": "getProduct",
+  "action": "deleteProduct",
   "arguments": {
     "ProductId": "4e7c408f-3c43-4570-aa03-598e7df9495c"
   }
