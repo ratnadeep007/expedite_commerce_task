@@ -3,10 +3,28 @@ schema {
     mutation: Mutation
 }
 
+type Product {
+    ProductId: String!
+    Name: String!
+    Description: String!
+    Category: ProductTaxonomy!
+    Price: Int!
+    Stock: Int!
+    CreatedAt: AWSDateTime
+    UpdatedAt: AWSDateTime
+}
+
+type ProductTaxonomy {
+    TaxonomyId: String!
+    Name: String!
+    Description: String!
+    ParentId: String!
+    Type: String!
+    CreatedAt: AWSDateTime
+    UpdatedAt: AWSDateTime
+}
+
 type Query {
-    # getPost(id: String!): Post
-    # sayHello(name: String): String
-    # sayGoodbye(name: String): String
     getProduct(ProductId: String): Product!
     getProductTaxonomy(TaxonomyId: String): ProductTaxonomy!
 }
@@ -36,7 +54,7 @@ type Mutation {
         Description: String!
         Price: Int!
         Category: String!
-        Stock: String!
+        Stock: Int!
     ): IdResponse!
     updateProduct(
         ProductId: String!
@@ -61,25 +79,4 @@ type Mutation {
         Type: String!
     ): ProductTaxonomy!
     deleteProductTaxonomy(TaxonomyId: String): IdResponse!
-}
-
-type Product {
-    ProductId: String!
-    Name: String!
-    Description: String!
-    Category: String!
-    Price: Int!
-    Stock: Int!
-    CreatedAt: AWSDateTime
-    UpdatedAt: AWSDateTime
-}
-
-type ProductTaxonomy {
-    TaxonomyId: String!
-    Name: String!
-    Description: String!
-    ParentId: String!
-    Type: String!
-    CreatedAt: AWSDateTime
-    UpdatedAt: AWSDateTime
 }

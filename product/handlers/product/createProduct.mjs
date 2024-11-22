@@ -19,6 +19,7 @@ export default async function createProduct(product, dynamodb) {
       Id: id,
     };
   } catch (err) {
+    console.log(err);
     return {
       statusCode: 500,
       body: err,
