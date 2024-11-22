@@ -10,10 +10,10 @@ Resources:
     Properties:
       TableName: Products
       AttributeDefinitions:
-        - AttributeName: ProductId
+        - AttributeName: productId
           AttributeType: S
       KeySchema:
-        - AttributeName: ProductId
+        - AttributeName: productId
           KeyType: HASH
       ProvisionedThroughput:
         ReadCapacityUnits: 5
@@ -24,21 +24,21 @@ Resources:
     Properties:
       TableName: ProductTaxonomyAttributes
       AttributeDefinitions:
-        - AttributeName: TaxonomyId
+        - AttributeName: taxonomyId
           AttributeType: S
-        - AttributeName: ParentId
+        - AttributeName: parentId
           AttributeType: S
-        - AttributeName: Name
+        - AttributeName: name
           AttributeType: S
       KeySchema:
-        - AttributeName: TaxonomyId
+        - AttributeName: taxonomyId
           KeyType: HASH
       GlobalSecondaryIndexes:
         - IndexName: ParentIndex
           KeySchema:
-            - AttributeName: ParentId
+            - AttributeName: parentId
               KeyType: HASH
-            - AttributeName: Name
+            - AttributeName: name
               KeyType: RANGE
           Projection:
             ProjectionType: ALL

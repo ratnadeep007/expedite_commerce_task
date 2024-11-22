@@ -4,24 +4,24 @@ function generateCommandParams(id, product) {
   return {
     TableName: "Products",
     Key: {
-      ProductId: id,
+      productId: id,
     },
     UpdateExpression:
       "SET #name = :name, #description = :description, #category = :category, #stock = :stock, #price = :price, #updatedAt = :timestamp",
     ExpressionAttributeNames: {
-      "#name": "Name",
-      "#description": "Description",
-      "#price": "Price",
-      "#stock": "Stock",
-      "#category": "Category",
-      "#updatedAt": "UpdatedAt",
+      "#name": "name",
+      "#description": "description",
+      "#price": "price",
+      "#stock": "stock",
+      "#category": "category",
+      "#updatedAt": "updatedAt",
     },
     ExpressionAttributeValues: {
-      ":name": product.Name,
-      ":description": product.Description,
-      ":price": product.Price,
-      ":category": product.Category,
-      ":stock": product.Stock,
+      ":name": product.name,
+      ":description": product.description,
+      ":price": product.price,
+      ":category": product.category,
+      ":stock": product.stock,
       ":timestamp": new Date().toISOString(),
     },
     ReturnValues: "ALL_NEW",
@@ -36,9 +36,6 @@ export default async function updateProduct(id, product, dynamodb) {
     console.log("Update successful", response);
     return response.Attributes;
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: err,
-    };
+    throw err;
   }
 }

@@ -6,18 +6,17 @@ export default async function getProductTaxonomy(id, dynamodb) {
     const params = {
       TableName: "ProductTaxonomyAttributes",
       Key: {
-        TaxonomyId: id,
+        taxonomyId: id,
       },
     };
     const command = new GetCommand(params);
     const response = await dynamodb.send(command);
     console.log("response: ", response);
+    if (!response.Item) {
+      throw new Error("Product Taxonomy not found");
+    }
     return response.Item;
   } catch (err) {
-    console.error(err);
-    return {
-      statusCode: 500,
-      body: err,
-    };
+    throw err;
   }
 }

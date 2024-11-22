@@ -3,16 +3,16 @@ import { PutCommand } from "@aws-sdk/lib-dynamodb";
 
 export default async function createProductTaxonomy(productTaxonomy, dynamodb) {
   const id = randomUUID();
-  if (!productTaxonomy.ParentId) {
-    productTaxonomy.ParentId = "root";
+  if (!productTaxonomy.parentId) {
+    productTaxonomy.parentId = "root";
   }
   try {
     const params = {
       TableName: "ProductTaxonomyAttributes",
       Item: {
-        TaxonomyId: id,
+        taxonomyId: id,
         ...productTaxonomy,
-        CreatedAt: new Date().toISOString(),
+        createdAt: new Date().toISOString(),
       },
       ReturnValue: "ALL_OLD",
     };
@@ -21,12 +21,9 @@ export default async function createProductTaxonomy(productTaxonomy, dynamodb) {
     await dynamodb.send(command);
     console.log("Insert successful");
     return {
-      Id: id,
+      id,
     };
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: err,
-    };
+    throw err;
   }
 }

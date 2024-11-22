@@ -4,79 +4,99 @@ schema {
 }
 
 type Product {
-    ProductId: String!
-    Name: String!
-    Description: String!
-    Category: ProductTaxonomy!
-    Price: Int!
-    Stock: Int!
-    CreatedAt: AWSDateTime
-    UpdatedAt: AWSDateTime
+    productId: String!
+    name: String!
+    description: String!
+    category: ProductTaxonomy!
+    price: Int!
+    stock: Int!
+    createdAt: AWSDateTime
+    updatedAt: AWSDateTime
 }
 
 type ProductTaxonomy {
-    TaxonomyId: String!
-    Name: String!
-    Description: String!
-    ParentId: String!
-    Type: String!
-    CreatedAt: AWSDateTime
-    UpdatedAt: AWSDateTime
+    taxonomyId: String!
+    name: String!
+    description: String!
+    parentId: String!
+    type: String!
+    createdAt: AWSDateTime
+    updatedAt: AWSDateTime
+}
+
+type Error {
+    message: String!
+    code: String!
+    type: String!
+}
+
+type ProductResponse {
+    data: Product
+    error: Error
+}
+type ProducTaxonomyResponse {
+    data: ProductTaxonomy
+    error: Error
 }
 
 type Query {
-    getProduct(ProductId: String): Product!
-    getProductTaxonomy(TaxonomyId: String): ProductTaxonomy!
+    getProduct(productId: String!): ProductResponse!
+    getProductTaxonomy(taxonomyId: String!): ProducTaxonomyResponse!
 }
 
 input ProductInput {
-    Name: String!
-    Description: String!
-    Price: Int!
-    Category: String!
-    Stock: String!
+    name: String!
+    description: String!
+    price: Int!
+    category: String!
+    stock: String!
 }
 
 input ProductTaxonomyInput {
-    Name: String!
-    Description: String!
-    ParentId: String
-    Type: String!
+    name: String!
+    description: String!
+    parentId: String
+    type: String!
 }
 
 type IdResponse {
-    Id: String!
+    id: String
+}
+
+type IdResponseError {
+    data: IdResponse
+    error: Error
 }
 
 type Mutation {
     addProduct(
-        Name: String!
-        Description: String!
-        Price: Int!
-        Category: String!
-        Stock: Int!
-    ): IdResponse!
+        name: String!
+        description: String!
+        price: Int!
+        category: String!
+        stock: Int!
+    ): IdResponseError!
     updateProduct(
-        ProductId: String!
-        Name: String!
-        Description: String!
-        Price: Int!
-        Category: String!
-        Stock: String!
-    ): Product!
-    deleteProduct(ProductId: String): IdResponse!
+        productId: String!
+        name: String!
+        description: String!
+        price: Int!
+        category: String!
+        stock: Int!
+    ): ProductResponse!
+    deleteProduct(productId: String): IdResponseError!
     addProductTaxonomy(
-        Name: String!
-        Description: String!
-        ParentId: String
-        Type: String!
-    ): IdResponse!
+        name: String!
+        description: String!
+        parentId: String
+        type: String!
+    ): IdResponseError!
     updateProductTaxonomy(
-        TaxonomyId: String!
-        Name: String!
-        Description: String!
-        ParentId: String
-        Type: String!
-    ): ProductTaxonomy!
-    deleteProductTaxonomy(TaxonomyId: String): IdResponse!
+        taxonomyId: String!
+        name: String!
+        description: String!
+        parentId: String
+        type: String!
+    ): ProducTaxonomyResponse!
+    deleteProductTaxonomy(taxonomyId: String): IdResponseError!
 }

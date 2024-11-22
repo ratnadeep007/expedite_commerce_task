@@ -5,22 +5,22 @@ function generateCommandParams(id, productTaxonomy) {
   return {
     TableName: "ProductTaxonomyAttributes",
     Key: {
-      TaxonomyId: id,
+      taxonomyId: id,
     },
     UpdateExpression:
       "SET #name = :name, #description = :description, #parentId = :parentId, #type = :type, #updatedAt = :timestamp",
     ExpressionAttributeNames: {
-      "#name": "Name",
-      "#description": "Description",
-      "#parentId": "ParentId",
-      "#type": "Type",
-      "#updatedAt": "UpdatedAt",
+      "#name": "name",
+      "#description": "description",
+      "#parentId": "parentId",
+      "#type": "type",
+      "#updatedAt": "updatedAt",
     },
     ExpressionAttributeValues: {
-      ":name": productTaxonomy.Name,
-      ":description": productTaxonomy.Description,
-      ":parentId": productTaxonomy.ParentId ?? "root",
-      ":type": productTaxonomy.Type,
+      ":name": productTaxonomy.name,
+      ":description": productTaxonomy.description,
+      ":parentId": productTaxonomy.parentId ?? "root",
+      ":type": productTaxonomy.type,
       ":timestamp": new Date().toISOString(),
     },
     ReturnValues: "ALL_NEW",
@@ -41,10 +41,6 @@ export default async function updateProductTaxonomy(
     console.log("Update successful");
     return response.Attributes;
   } catch (err) {
-    console.log(err);
-    return {
-      statusCode: 500,
-      body: err,
-    };
+    throw err;
   }
 }

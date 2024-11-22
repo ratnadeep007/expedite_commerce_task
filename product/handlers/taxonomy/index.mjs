@@ -5,7 +5,7 @@ import updateProductTaxonomy from "./updateProductTaxonomy.mjs";
 
 export default async function handleProductTaxonomy(event, dynamodb) {
   let taxonomy = event.arguments;
-  let id = event.arguments.TaxonomyId;
+  let id = event.arguments.taxonomyId;
   switch (event.action) {
     case "addProductTaxonomy":
       return await createProductTaxonomy(taxonomy, dynamodb);
