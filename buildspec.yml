@@ -1,12 +1,6 @@
 version: 0.2
 phases:
-  install:
-    runtime-versions:
-      python: 3.8
   build:
     commands:
-      - sam package --template-file template.yml --s3-bucket expeditecommerce-task-bucket --output-template-file packaged.yml
-artifacts:
-  files:
-    - template.yml
-    - packaged.yml
+      - sam build
+      - sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
