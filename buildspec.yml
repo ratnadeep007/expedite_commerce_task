@@ -5,7 +5,7 @@ phases:
       nodejs: 20
     commands:
       - echo Installing dependencies...
-      - npm install
+      - cd product && npm install
   build:
     commands:
       - echo Running tests...
