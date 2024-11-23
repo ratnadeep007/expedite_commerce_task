@@ -2,6 +2,7 @@ import createProduct from "./createProduct.mjs";
 import getProduct from "./getProduct.mjs";
 import updateProduct from "./updateProduct.mjs";
 import deleteProduct from "./deleteProduct.mjs";
+import getProductsByCategory from "./getProductsByCategory.mjs";
 
 export default async function handleProduct(event, dynamodb) {
   let product = event.arguments;
@@ -15,6 +16,8 @@ export default async function handleProduct(event, dynamodb) {
       return await updateProduct(args.productId, product, dynamodb);
     case "deleteProduct":
       return await deleteProduct(args.productId, dynamodb);
+    case "getProductsByCategory":
+      return await getProductsByCategory(args.taxonomyId, dynamodb);
     default:
       throw new Error("Unkown action, unable to resolve: " + event.action);
   }

@@ -84,13 +84,20 @@ type ProductResponse {
     data: Product
     error: Error
 }
+
 type ProducTaxonomyResponse {
     data: ProductTaxonomy
     error: Error
 }
 
+type ProductListResponse {
+    data: [Product]
+    error: Error
+}
+
 type Query {
     getProduct(productId: String!): ProductResponse!
+    getProductsByCategory(taxonomyId: String!): ProductListResponse!
     getProductTaxonomy(taxonomyId: String!): ProducTaxonomyResponse!
 }
 
@@ -166,7 +173,6 @@ type Mutation {
 │   │   ├── products/
 │   │   └── taxonomy/
 │   ├── package.json
-│   ├── jest.config.js
 │   └── app.mjs
 ├── tests/
 ├── template.yaml

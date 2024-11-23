@@ -131,6 +131,12 @@ Resources:
               Version: 1.0.0
             Pipeline:
               - product
+          getProductsByCategory:
+            Runtime:
+              Name: APPSYNC_JS
+              Version: 1.0.0
+            Pipeline:
+              - product
           getProductTaxonomy:
             Runtime:
               Name: APPSYNC_JS
