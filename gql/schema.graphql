@@ -51,21 +51,6 @@ type Query {
     getProductTaxonomy(taxonomyId: String!): ProducTaxonomyResponse!
 }
 
-input ProductInput {
-    name: String!
-    description: String!
-    price: Int!
-    category: String!
-    stock: String!
-}
-
-input ProductTaxonomyInput {
-    name: String!
-    description: String!
-    parentId: String
-    type: String!
-}
-
 type IdResponse {
     id: String
 }
