@@ -21,7 +21,7 @@ export default async function getProduct(id, dynamodb) {
     const paramsTaxonomy = {
       TableName: "ProductTaxonomyAttributes",
       Key: {
-        taxonomyId: product.Category,
+        taxonomyId: product.category,
       },
     };
     const commandTaxonomy = new GetCommand(paramsTaxonomy);
